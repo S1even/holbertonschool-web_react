@@ -1,0 +1,15 @@
+.root-notifications {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.notification-items {
+  border: 3px dashed #e1003c;
+  padding: 6px 12px;
+}
+
+.notification-items p {
+  margin: 0;
+  font-size: 1rem;
+}
