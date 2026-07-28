@@ -15,9 +15,8 @@ module.exports = {
     path: path.resolve(__dirname, 'public'),
   },
   devServer: {
-    static: path.resolve(__dirname, 'public'),
+    static: path.resolve(__dirname, './public'),
     port: 8564,
-    open: true,
   },
   optimization: {
     splitChunks: {
