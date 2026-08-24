@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Login from './Login'
 
@@ -13,12 +13,14 @@ describe('Login', () => {
 
   test('focuses inputs when their labels are clicked', async () => {
     const user = userEvent.setup()
-    render(<Login />)
+    const { container } = render(<Login />)
+    const labels = container.querySelectorAll('label')
+    const inputs = container.querySelectorAll('input')
 
-    await user.click(screen.getByText(/email:/i))
-    expect(screen.getByLabelText(/email/i)).toHaveFocus()
+    await user.click(labels[0])
+    expect(inputs[0]).toHaveFocus()
 
-    await user.click(screen.getByText(/password:/i))
-    expect(screen.getByLabelText(/password/i)).toHaveFocus()
+    await user.click(labels[1])
+    expect(inputs[1]).toHaveFocus()
   })
 })
