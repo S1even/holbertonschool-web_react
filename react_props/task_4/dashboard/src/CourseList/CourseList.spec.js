@@ -17,10 +17,10 @@ describe('CourseList', () => {
     expect(screen.getByText('React')).toBeInTheDocument()
   })
 
-  test('renders 1 body row when courses is empty', () => {
+  test('renders 1 row when courses is empty', () => {
     const { container } = render(<CourseList courses={[]} />)
 
-    expect(container.querySelectorAll('tbody tr')).toHaveLength(1)
+    expect(container.querySelectorAll('tr')).toHaveLength(1)
     expect(screen.getByText(/no course available yet/i)).toBeInTheDocument()
   })
 })
