@@ -1,0 +1,33 @@
+.root-notifications {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  min-width: 230px;
+}
+
+.notification-title {
+  margin-bottom: 10px;
+  text-align: right;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notification-items {
+  border: 3px dashed #e1003c;
+  padding: 10px 20px;
+  background-color: #ffffff;
+}
+
+.notification-items p {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.notification-items ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.notification-items li {
+  margin-bottom: 5px;
+}
