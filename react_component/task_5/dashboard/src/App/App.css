@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+  color: #2b2b2b;
+  background-color: #ffffff;
+}
+
+/* The main region, whatever it holds: the login form or the course list. The
+   red rule below it is what separates the page from the footer. */
+.App-body {
+  min-height: 55vh;
+  padding: 40px 20px;
+  border-bottom: 3px solid #e1003c;
+}
