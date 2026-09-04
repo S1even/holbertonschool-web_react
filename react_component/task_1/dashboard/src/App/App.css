@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+  color: #2b2b2b;
+  background-color: #ffffff;
+}
+
+.App-main {
+  min-height: 45vh;
+  padding: 40px 20px;
+  border-bottom: 3px solid #e1003c;
+}
