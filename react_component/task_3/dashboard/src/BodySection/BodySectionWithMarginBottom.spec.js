@@ -2,24 +2,40 @@ import { render, screen } from '@testing-library/react'
 import BodySectionWithMarginBottom from './BodySectionWithMarginBottom'
 
 describe('BodySectionWithMarginBottom', () => {
-  test('contains a div with the bodySectionWithMargin class', () => {
+  test('renders a div with the class bodySectionWithMargin', () => {
     const { container } = render(
-      <BodySectionWithMarginBottom title="Test title" />,
+      <BodySectionWithMarginBottom title="test">
+        <p>test</p>
+      </BodySectionWithMarginBottom>
     )
+    const wrapper = container.querySelector('div.bodySectionWithMargin')
 
-    expect(container.querySelector('.bodySectionWithMargin')).toBeInTheDocument()
+    expect(wrapper).toBeInTheDocument()
   })
 
-  test('renders the BodySection component', () => {
-    render(
-      <BodySectionWithMarginBottom title="Test title">
-        <p>Test child</p>
-      </BodySectionWithMarginBottom>,
+  test('renders the BodySection component inside that div', () => {
+    const { container } = render(
+      <BodySectionWithMarginBottom title="test">
+        <p>test</p>
+      </BodySectionWithMarginBottom>
     )
+    const wrapper = container.querySelector('.bodySectionWithMargin')
+
+    expect(wrapper.querySelector('.bodySection')).toBeInTheDocument()
+  })
+
+  test('hands the title and the children down to it', () => {
+    const { container } = render(
+      <BodySectionWithMarginBottom title="test">
+        <p>test</p>
+      </BodySectionWithMarginBottom>
+    )
+    const section = container.querySelector('.bodySection')
 
     expect(
-      screen.getByRole('heading', { level: 2, name: /test title/i }),
+      screen.getByRole('heading', { level: 2, name: /test/i })
     ).toBeInTheDocument()
-    expect(screen.getByText(/test child/i)).toBeInTheDocument()
+    expect(section.querySelectorAll('p')).toHaveLength(1)
+    expect(section).toHaveTextContent(/test/i)
   })
 })

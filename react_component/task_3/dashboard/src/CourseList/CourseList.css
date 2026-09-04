@@ -1,26 +1,25 @@
 #CourseList {
-  width: 100%;
-  max-width: 760px;
+  width: 95%;
   margin: 0 auto;
-  border: 1px solid #d7d7d7;
+  border: 1px solid #adadad;
   border-collapse: collapse;
 }
 
 #CourseList th,
 #CourseList td {
-  padding: 10px 14px;
-  border: 1px solid #d7d7d7;
-  text-align: left;
+  border: 1px solid #adadad;
+  padding: 2px 5px;
 }
 
 #CourseList th {
-  font-weight: 600;
-}
-
-#CourseList th[colspan='2'] {
   text-align: center;
 }
 
-#CourseList tbody th {
-  font-weight: 400;
+#CourseList td {
+  text-align: left;
+}
+
+/* The credit column takes a third of the table, as in the mockup. */
+#CourseList tbody td:last-child {
+  width: 33%;
 }
