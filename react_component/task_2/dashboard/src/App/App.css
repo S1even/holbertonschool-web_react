@@ -5,8 +5,10 @@ body {
   background-color: #ffffff;
 }
 
-.App-main {
-  min-height: 45vh;
+/* The main region, whatever it holds: the login form or the course list. The
+   red rule below it is what separates the page from the footer. */
+.App-body {
+  min-height: 55vh;
   padding: 40px 20px;
   border-bottom: 3px solid #e1003c;
 }

@@ -3,17 +3,16 @@ import { Component } from 'react'
 class NotificationItem extends Component {
   render() {
     const { id, type, html, value, markAsRead } = this.props
-    const style = {
-      color: type === 'urgent' ? 'red' : 'blue',
-    }
+    // The colours used to live in Notifications.css, keyed on the type attribute.
+    const style = { color: type === 'urgent' ? 'red' : 'blue' }
 
     if (html) {
       return (
         <li
           data-notification-type={type}
-          dangerouslySetInnerHTML={html}
-          onClick={() => markAsRead(id)}
           style={style}
+          onClick={() => markAsRead(id)}
+          dangerouslySetInnerHTML={html}
         />
       )
     }
@@ -21,8 +20,8 @@ class NotificationItem extends Component {
     return (
       <li
         data-notification-type={type}
-        onClick={() => markAsRead(id)}
         style={style}
+        onClick={() => markAsRead(id)}
       >
         {value}
       </li>

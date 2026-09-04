@@ -7,7 +7,7 @@ function CourseListRow({
     return (
       <tr>
         {textSecondCell === null ? (
-          <th colSpan="2">{textFirstCell}</th>
+          <th colSpan={2}>{textFirstCell}</th>
         ) : (
           <>
             <th>{textFirstCell}</th>
