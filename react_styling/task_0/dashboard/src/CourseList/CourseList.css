@@ -1,0 +1,25 @@
+#CourseList {
+  width: 95%;
+  margin: 0 auto;
+  border: 1px solid #adadad;
+  border-collapse: collapse;
+}
+
+#CourseList th,
+#CourseList td {
+  border: 1px solid #adadad;
+  padding: 2px 5px;
+}
+
+#CourseList th {
+  text-align: center;
+}
+
+#CourseList td {
+  text-align: left;
+}
+
+/* The credit column takes a third of the table, as in the mockup. */
+#CourseList tbody td:last-child {
+  width: 33%;
+}

@@ -1,0 +1,12 @@
+.App-login p {
+  margin: 0 0 25px;
+  font-size: 1.1rem;
+}
+
+.App-login label {
+  margin-right: 8px;
+}
+
+.App-login input {
+  margin-right: 20px;
+}
