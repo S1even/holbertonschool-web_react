@@ -4,10 +4,11 @@ function CourseListRow({
   textSecondCell = null,
 }) {
   const rowClasses = isHeader
-    ? 'bg-[var(--color-table-header)] opacity-[66%]'
-    : 'bg-[var(--color-table-rows)] opacity-[45%]'
-  const headerCellClasses = 'border border-gray-400 text-center font-bold'
-  const dataCellClasses = 'border border-gray-400 pl-2 text-left'
+    ? 'bg-table-header opacity-[66%]'
+    : 'bg-table-rows opacity-[45%]'
+  const headerCellClasses =
+    'border border-gray-400 bg-table-header text-center font-bold'
+  const dataCellClasses = 'border border-gray-400 bg-table-rows pl-2 text-left'
 
   if (isHeader) {
     return (
