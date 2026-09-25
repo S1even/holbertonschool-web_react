@@ -80,11 +80,8 @@ describe('App', () => {
     expect(fields).toHaveLength(2)
   })
 
-  // La prop est passée explicitement plutôt que laissée à sa valeur par défaut :
-  // les scripts du checker réécrivent `App.defaultProps.isLoggedIn` entre deux
-  // vérifications, et un test qui s'appuie dessus casse sans rien apprendre.
-  test('renders the Login form when isLoggedIn is false', () => {
-    render(<App isLoggedIn={false} />)
+  test('is logged out by default, so the Login form shows without the prop', () => {
+    render(<App />)
 
     expect(
       screen.getByText(/login to access the full dashboard/i)
