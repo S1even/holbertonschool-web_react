@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-roboto: "Roboto", sans-serif;
+
+  --color-table-header: #deb5b5;
+  --color-table-rows: #CDCDCD;
+
+  --main-color: #e1003c;
+  --default-notification-item: blue;
+  --urgent-notification-item: red;
+}
+
+@layer base {
+  html,
+  body {
+    font-family: var(--font-roboto);
+    color: #2b2b2b;
+    background-color: #ffffff;
+  }
+
+  /* Conteneur de mise en page : c'est lui qui donne la marge latérale de 12px
+     à toute la page, et la colonne flex d'au moins un écran qui permet au
+     Footer de rester collé en bas. `relative` sert d'ancrage au panneau de
+     notifications, positionné en absolu. */
+  #root {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0 12px;
+  }
+
+  .App-body {
+    padding-top: 38px;
+  }
+}
