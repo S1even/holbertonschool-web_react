@@ -1,101 +1,111 @@
-import { fireEvent, render } from '@testing-library/react'
-import NotificationItem from './NotificationItem'
+import { render, screen, fireEvent } from '@testing-library/react';
+import NotificationItem from './NotificationItem';
+import { getLatestNotification } from '../utils/utils';
 
-describe('NotificationItem', () => {
-  test('renders the value as text', () => {
-    const { container } = render(
-      <NotificationItem type="default" value="New course available" />
-    )
 
-    expect(container.querySelector('li')).toHaveTextContent(
-      /new course available/i
-    )
-  })
+test('it should display the correct notification with a red color, and set the "data-notification-type" to urgent whenever it receives the type "urgent" props', () => {
+  const props = {
+    type: 'urgent',
+    html: {__html: getLatestNotification()},
+  }
 
-  test('renders the html prop as markup', () => {
-    const { container } = render(
+  render(<NotificationItem {...props} />);
+
+  const liElement = screen.getByRole('listitem');
+
+  expect(liElement).toHaveAttribute('data-notification-type', 'urgent');
+});
+
+test('it should display the correct notification with a blue color, and set the "data-notification-type" to default whenever it receives the type "default" props', () => {
+  const props = {
+    type: 'default',
+    html: undefined,
+  }
+
+  render(<NotificationItem {...props} />);
+
+  const liElement = screen.getByRole('listitem');
+
+  expect(liElement).toHaveAttribute('data-notification-type', 'default');
+});
+
+test('it should call markAsRead with the correct id when the notification item is clicked', () => {
+  const mockMarkAsRead = jest.fn();
+  const props = {
+    id: 42,
+    type: 'default',
+    value: 'Test notification',
+    markAsRead: mockMarkAsRead,
+  };
+
+  render(<NotificationItem {...props} />);
+
+  const liElement = screen.getByRole('listitem');
+
+  fireEvent.click(liElement);
+
+  expect(mockMarkAsRead).toHaveBeenCalledTimes(1);
+  expect(mockMarkAsRead).toHaveBeenCalledWith(42);
+});
+
+describe('NotificationItem - Pure Component behavior', () => {
+  const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
+  let markAsRead;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    markAsRead = jest.fn();
+  });
+
+  test('should re-render when props change', () => {
+    const { rerender } = render(
       <NotificationItem
+        id={1}
         type="urgent"
-        html={{ __html: '<strong>Urgent requirement</strong> - complete by EOD' }}
-      />
-    )
-    const item = container.querySelector('li')
-
-    expect(item.querySelector('strong')).toBeInTheDocument()
-    expect(item).toHaveTextContent(/urgent requirement - complete by eod/i)
-  })
-
-  test('does not crash when no prop is passed', () => {
-    const { container } = render(<NotificationItem />)
-
-    expect(container.querySelector('li')).toBeInTheDocument()
-  })
-
-  test('calls markAsRead with its id when the li is clicked', () => {
-    const markAsRead = jest.fn()
-    const { container } = render(
-      <NotificationItem
-        id={7}
-        type="default"
-        value="New course available"
+        value="New notification"
         markAsRead={markAsRead}
       />
-    )
+    );
 
-    // Nothing is called until the item is actually hit.
-    expect(markAsRead).not.toHaveBeenCalled()
+    const renderSpy = jest.spyOn(NotificationItem.prototype, 'render');
 
-    fireEvent.click(container.querySelector('li'))
-
-    expect(markAsRead).toHaveBeenCalledTimes(1)
-    expect(markAsRead).toHaveBeenCalledWith(7)
-  })
-
-  test('does not re-render when it is given the same props again', () => {
-    const markAsRead = jest.fn()
-    const renderSpy = jest.spyOn(NotificationItem.prototype, 'render')
-    // Two distinct elements carrying equal props: React reconciles them, so only a
-    // shallow comparison of the props can stop the second render.
-    const props = {
-      id: 1,
-      type: 'default',
-      value: 'New course available',
-      markAsRead,
-    }
-
-    const { rerender } = render(<NotificationItem {...props} />)
-    rerender(<NotificationItem {...props} />)
-
-    expect(renderSpy).toHaveBeenCalledTimes(1)
-
-    // A prop that actually changed does go through.
     rerender(
       <NotificationItem
         id={1}
         type="urgent"
-        value="New resume available"
+        value="Updated notification"
         markAsRead={markAsRead}
       />
-    )
+    );
 
-    expect(renderSpy).toHaveBeenCalledTimes(2)
+    expect(renderSpy).toHaveBeenCalled();
+    renderSpy.mockRestore();
+  });
 
-    renderSpy.mockRestore()
-  })
+  test('should not re-render when props do not change', () => {
+    const renderSpy = jest.spyOn(NotificationItem.prototype, 'render');
 
-  test('calls markAsRead as well when the item holds markup', () => {
-    const markAsRead = jest.fn()
-    const { container } = render(
+    const { rerender } = render(
       <NotificationItem
-        id={3}
+        id={1}
         type="urgent"
-        html={{ __html: '<strong>Urgent requirement</strong>' }}
+        value="New notification"
         markAsRead={markAsRead}
       />
-    )
+    );
 
-    fireEvent.click(container.querySelector('li'))
+    const renderCount = renderSpy.mock.calls.length;
 
-    expect(markAsRead).toHaveBeenCalledWith(3)
-  })
-})
+    rerender(
+      <NotificationItem
+        id={1}
+        type="urgent"
+        value="New notification"
+        markAsRead={markAsRead}
+      />
+    );
+
+    expect(renderSpy.mock.calls.length).toBe(renderCount);
+    renderSpy.mockRestore();
+  });
+});

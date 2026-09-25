@@ -1,36 +1,24 @@
-function CourseListRow({
+export default function CourseListRow({
   isHeader = false,
   textFirstCell = '',
-  textSecondCell = null,
+  textSecondCell = null
 }) {
-  const rowClasses = isHeader
-    ? 'bg-table-header opacity-[66%]'
-    : 'bg-table-rows opacity-[45%]'
-  const headerCellClasses =
-    'border border-gray-400 bg-table-header text-center font-bold'
-  const dataCellClasses = 'border border-gray-400 bg-table-rows pl-2 text-left'
-
-  if (isHeader) {
-    return (
-      <tr className={rowClasses}>
-        {textSecondCell === null ? (
-          <th className={headerCellClasses} colSpan={2}>{textFirstCell}</th>
-        ) : (
-          <>
-            <th className={headerCellClasses}>{textFirstCell}</th>
-            <th className={`${headerCellClasses} w-1/3`}>{textSecondCell}</th>
-          </>
-        )}
-      </tr>
-    )
-  }
-
   return (
-    <tr className={rowClasses}>
-      <td className={dataCellClasses}>{textFirstCell}</td>
-      <td className={`${dataCellClasses} w-1/3`}>{textSecondCell}</td>
+    <tr className={isHeader
+      ? "bg-[color-mix(in_srgb,var(--color-table-header)_66%,transparent)]"
+      : "bg-[color-mix(in_srgb,var(--color-table-rows)_45%,transparent)]"
+    }>
+      {isHeader ? (
+        <>
+          <th className="border border-gray-400" colSpan={textSecondCell ? 1 : 2}>{textFirstCell}</th>
+          {textSecondCell && <th className="border border-gray-400">{textSecondCell}</th>}
+        </>
+      ) : (
+        <>
+          <td className="border border-gray-400 pl-2">{textFirstCell}</td>
+          <td className="border border-gray-400 pl-2">{textSecondCell}</td>
+        </>
+      )}
     </tr>
   )
 }
-
-export default CourseListRow

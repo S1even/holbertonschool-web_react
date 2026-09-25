@@ -1,26 +1,28 @@
-import { render, screen } from '@testing-library/react'
-import Header from './Header'
+import { render, screen } from '@testing-library/react';
+import Header from './Header';
 
-describe('Header', () => {
-  test('renders the Holberton logo', () => {
-    const { container } = render(<Header />)
-    const images = Array.from(container.querySelectorAll('img'))
+export const convertHexToRGBA = (hexCode) => {
+  let hex = hexCode.replace('#', '');
 
-    // The logo is identified by its alt text or its source, so the assertion
-    // survives a component that words the alt attribute differently.
-    const logo = images.find((image) =>
-      /holberton/i.test(`${image.getAttribute('alt')} ${image.getAttribute('src')}`)
-    )
+  if (hex.length === 3) {
+    hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+    console.log({hex})
+  }
 
-    expect(logo).toBeDefined()
-    expect(logo).toBeInTheDocument()
-  })
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
 
-  test('renders an h1 with the text School dashboard', () => {
-    render(<Header />)
+  return { r, g, b };
+};
 
-    expect(
-      screen.getByRole('heading', { level: 1, name: /school dashboard/i })
-    ).toBeInTheDocument()
-  })
-})
+test('should contain a <p/> element with specific text, <h1/>, and an <img/>', () => {
+  render(<Header />);
+
+  const headingElement = screen.getByRole('heading', {name: /school Dashboard/i});
+  const imgElement = screen.getByAltText('holberton logo')
+
+  expect(headingElement).toBeInTheDocument();
+  expect(headingElement).toHaveStyle({color: convertHexToRGBA('#e1003c') })
+  expect(imgElement).toBeInTheDocument();
+});

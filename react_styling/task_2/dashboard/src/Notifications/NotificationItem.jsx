@@ -1,43 +1,35 @@
-import { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 
-// Pure: an item only re-renders when one of its own props actually changes.
-class NotificationItem extends PureComponent {
+export default class NotificationItem extends PureComponent {
   render() {
-    const { id, type, html, value, markAsRead } = this.props
-    const itemClasses =
-      type === 'urgent'
-        ? 'mb-0.5 text-[var(--urgent-notification-item)]'
-        : 'mb-0.5 text-[var(--default-notification-item)]'
-
-    if (html) {
+    const { type, html, value, markAsRead, id } = this.props;
+    // console.log(`Rendering NotificationItem with id: ${id}, type: ${type}, value: ${value}`);
+    
+    if (type === 'default') {
       return (
-        <li
-          className={itemClasses}
+        <li 
+          className="text-[color:var(--default-notification-item)] pl-1"
           data-notification-type={type}
           onClick={() => markAsRead(id)}
+        >{value}</li>
+      );
+    } else if (type === 'urgent' && html !== undefined) {
+      return (
+        <li 
+          className="text-[color:var(--urgent-notification-item)] pl-1"
+          data-notification-type={type} 
           dangerouslySetInnerHTML={html}
-        />
-      )
+          onClick={() => markAsRead(id)}
+        ></li>
+      );
+    } else {
+      return (
+        <li 
+          className="text-[color:var(--urgent-notification-item)] pl-1"
+          data-notification-type={type}
+          onClick={() => markAsRead(id)}
+        >{value}</li>
+      );
     }
-
-    return (
-      <li
-        className={itemClasses}
-        data-notification-type={type}
-        onClick={() => markAsRead(id)}
-      >
-        {value}
-      </li>
-    )
   }
 }
-
-NotificationItem.defaultProps = {
-  id: 0,
-  type: 'default',
-  html: null,
-  value: '',
-  markAsRead: () => {},
-}
-
-export default NotificationItem

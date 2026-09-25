@@ -1,41 +1,31 @@
-import CourseListRow from './CourseListRow'
-import WithLogging from '../HOC/WithLogging'
+import WithLogging from '../HOC/WithLogging';
+import CourseListRow from './CourseListRow';
 
 function CourseList({ courses = [] }) {
-  if (courses.length === 0) {
-    return (
-      <div className="mx-auto w-4/5">
-        <table id="CourseList" className="w-full border-collapse border border-gray-400">
+  return (
+    <div className="courses mx-auto my-32 w-4/5">
+      {courses.length > 0 ? (
+        <table className="w-full border-collapse border border-gray-500">
           <thead>
-            <CourseListRow textFirstCell="No course available yet" isHeader />
+            <CourseListRow textFirstCell="Available courses" isHeader={true} />
+            <CourseListRow textFirstCell="Course name" textSecondCell="Credit" isHeader={true} />
+          </thead>
+          <tbody>
+            {courses.map((course) => (
+              <CourseListRow key={course.id} textFirstCell={course.name} textSecondCell={course.credit} />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <table className="w-full border-collapse border border-gray-500">
+          <thead>
+            <CourseListRow isHeader={true} textFirstCell="No course available yet" />
           </thead>
         </table>
-      </div>
-    )
-  }
-
-  return (
-    <div className="mx-auto w-4/5">
-      <table id="CourseList" className="w-full border-collapse border border-gray-400">
-        <thead>
-          <CourseListRow textFirstCell="Available courses" isHeader />
-          <CourseListRow
-            textFirstCell="Course name"
-            textSecondCell="Credit"
-            isHeader
-          />
-        </thead>
-        <tbody>
-          {courses.map(({ id, name, credit }) => (
-            <CourseListRow key={id} textFirstCell={name} textSecondCell={credit} />
-          ))}
-        </tbody>
-      </table>
+      )}
     </div>
-  )
+  );
 }
 
-// Exported wrapped, so every mount and unmount of the table is logged.
-const CourseListWithLogging = WithLogging(CourseList)
-
+const CourseListWithLogging = WithLogging(CourseList);
 export default CourseListWithLogging
