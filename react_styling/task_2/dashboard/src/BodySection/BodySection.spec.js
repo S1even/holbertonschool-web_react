@@ -1,28 +1,46 @@
-import { render, screen } from '@testing-library/react';
-import BodySection from './BodySection';
+import { render, screen } from '@testing-library/react'
+import BodySection from './BodySection'
 
-test('It should render a heading with the title prop value', () => {
-  render(
-    <BodySection title="Test Title">
-      <p>Test child</p>
-    </BodySection>
-  );
+describe('BodySection', () => {
+  test('renders a heading holding the title prop', () => {
+    const { container } = render(<BodySection title="test" />)
 
-  const titleElement = screen.getByRole('heading', { name: /test title/i });
-  expect(titleElement).toBeInTheDocument();
-  expect(titleElement.tagName).toBe('H2');
-});
+    expect(
+      screen.getByRole('heading', { level: 2, name: /test/i })
+    ).toBeInTheDocument()
+    expect(container.querySelector('.bodySection')).toBeInTheDocument()
+  })
 
-test('It should render any number of children passed to it', () => {
-  render(
-    <BodySection title="Test Title">
-      <p>Child 1</p>
-      <p>Child 2</p>
-      <p>Child 3</p>
-    </BodySection>
-  );
+  test('renders the single child it is given', () => {
+    render(
+      <BodySection title="test">
+        <p>test</p>
+      </BodySection>
+    )
 
-  expect(screen.getByText('Child 1')).toBeInTheDocument();
-  expect(screen.getByText('Child 2')).toBeInTheDocument();
-  expect(screen.getByText('Child 3')).toBeInTheDocument();
-});
+    expect(screen.getByText(/^test$/i, { selector: 'p' })).toBeInTheDocument()
+  })
+
+  test('renders any number of children', () => {
+    const { container } = render(
+      <BodySection title="Many children">
+        <p>first</p>
+        <p>second</p>
+        <p>third</p>
+      </BodySection>
+    )
+    const section = container.querySelector('.bodySection')
+
+    expect(section.querySelectorAll('p')).toHaveLength(3)
+    // The heading comes first, then the children, in the order they were passed.
+    expect(section.firstChild.tagName).toBe('H2')
+    expect(section).toHaveTextContent(/first.*second.*third/)
+  })
+
+  test('renders without children', () => {
+    const { container } = render(<BodySection title="Alone" />)
+
+    expect(container.querySelector('.bodySection')).toBeInTheDocument()
+    expect(container.querySelectorAll('p')).toHaveLength(0)
+  })
+})

@@ -1,24 +1,40 @@
-export default function CourseListRow({
+// Les cellules partagent la même bordure ; seul un td porte le retrait à gauche.
+const cellClass = 'border border-gray-400'
+const dataCellClass = `${cellClass} pl-2`
+
+function CourseListRow({
   isHeader = false,
   textFirstCell = '',
-  textSecondCell = null
+  textSecondCell = null,
 }) {
+  // La teinte et l'opacité de la ligne dépendent de sa nature.
+  const rowClass = isHeader
+    ? 'bg-table-header opacity-66'
+    : 'bg-table-rows opacity-45'
+
+  if (isHeader) {
+    return (
+      <tr className={rowClass}>
+        {textSecondCell === null ? (
+          <th colSpan={2} className={cellClass}>
+            {textFirstCell}
+          </th>
+        ) : (
+          <>
+            <th className={cellClass}>{textFirstCell}</th>
+            <th className={cellClass}>{textSecondCell}</th>
+          </>
+        )}
+      </tr>
+    )
+  }
+
   return (
-    <tr className={isHeader
-      ? "bg-[color-mix(in_srgb,var(--color-table-header)_66%,transparent)]"
-      : "bg-[color-mix(in_srgb,var(--color-table-rows)_45%,transparent)]"
-    }>
-      {isHeader ? (
-        <>
-          <th className="border border-gray-400" colSpan={textSecondCell ? 1 : 2}>{textFirstCell}</th>
-          {textSecondCell && <th className="border border-gray-400">{textSecondCell}</th>}
-        </>
-      ) : (
-        <>
-          <td className="border border-gray-400 pl-2">{textFirstCell}</td>
-          <td className="border border-gray-400 pl-2">{textSecondCell}</td>
-        </>
-      )}
+    <tr className={rowClass}>
+      <td className={dataCellClass}>{textFirstCell}</td>
+      <td className={dataCellClass}>{textSecondCell}</td>
     </tr>
   )
 }
+
+export default CourseListRow

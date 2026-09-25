@@ -1,46 +1,76 @@
-import { render, screen, within } from '@testing-library/react';
-import CourseListRow from './CourseListRow';
+import { render, screen } from '@testing-library/react'
+import CourseListRow from './CourseListRow'
 
-test('it should display 1 "th" element with colspan=2 when isHeader is true and textSecondCell is null', () => {
+// A tr is only valid inside a table section, so every row is rendered in one.
+// Without this React logs a validateDOMNesting warning.
+const renderInHead = (ui) =>
   render(
     <table>
-      <tbody>
-        <CourseListRow isHeader={true} textFirstCell="First" textSecondCell={null} />
-      </tbody>
+      <thead>{ui}</thead>
     </table>
   )
 
-  const thElement = screen.getByRole('columnheader');
-
-  expect(thElement).toHaveAttribute('colSpan', '2');
-});
-
-test('it should display 2 "th" elements when isHeader is true and textSecondCell is not null', () => {
+const renderInBody = (ui) =>
   render(
     <table>
-      <tbody>
-        <CourseListRow isHeader={true} textFirstCell="First" textSecondCell="Second" />
-      </tbody>
+      <tbody>{ui}</tbody>
     </table>
   )
 
-  const thElements = screen.getAllByRole('columnheader');
+describe('CourseListRow', () => {
+  describe('when isHeader is true', () => {
+    test('renders one columnheader with colspan 2 when textSecondCell is null', () => {
+      const { container } = renderInHead(
+        <CourseListRow isHeader textFirstCell="Available courses" />
+      )
 
-  expect(thElements).toHaveLength(2);
-});
+      const headers = screen.getAllByRole('columnheader')
 
-test('it should render 2 "td" elements inside a "tr" element when isHeader is false', () => {
-  render(
-    <table>
-      <tbody>
-        <CourseListRow isHeader={false} textFirstCell="Data1" textSecondCell="Data2" />
-      </tbody>
-    </table>
-  )
+      expect(headers).toHaveLength(1)
+      expect(headers[0]).toHaveAttribute('colspan', '2')
+      expect(headers[0]).toHaveTextContent(/available courses/i)
+      expect(container.querySelectorAll('tr')).toHaveLength(1)
+      expect(container.querySelectorAll('td')).toHaveLength(0)
+    })
 
-  const trElement = screen.getByRole('row');
-  const tdElements = within(trElement).getAllByRole('cell');
+    test('renders 2 th cells when textSecondCell is not null', () => {
+      const { container } = renderInHead(
+        <CourseListRow
+          isHeader
+          textFirstCell="Course name"
+          textSecondCell="Credit"
+        />
+      )
 
-  expect(trElement).toBeInTheDocument();
-  expect(tdElements).toHaveLength(2);
-});
+      const headers = container.querySelectorAll('th')
+
+      expect(headers).toHaveLength(2)
+      expect(headers[0]).toHaveTextContent(/course name/i)
+      expect(headers[1]).toHaveTextContent(/credit/i)
+      expect(headers[0]).not.toHaveAttribute('colspan')
+    })
+  })
+
+  describe('when isHeader is false', () => {
+    test('renders two td elements within a tr element', () => {
+      const { container } = renderInBody(
+        <CourseListRow textFirstCell="ES6" textSecondCell={60} />
+      )
+
+      const row = container.querySelector('tr')
+      const cells = row.querySelectorAll('td')
+
+      expect(row).toBeInTheDocument()
+      expect(cells).toHaveLength(2)
+      expect(row.querySelectorAll('th')).toHaveLength(0)
+      expect(cells[0]).toHaveTextContent(/es6/i)
+      expect(cells[1]).toHaveTextContent('60')
+    })
+  })
+
+  test('does not crash when no prop is passed', () => {
+    const { container } = renderInBody(<CourseListRow />)
+
+    expect(container.querySelectorAll('td')).toHaveLength(2)
+  })
+})
