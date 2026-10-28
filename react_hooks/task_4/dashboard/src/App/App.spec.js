@@ -72,8 +72,10 @@ describe('App', () => {
   beforeEach(() => {
     // WithLogging logs every mount and unmount of the Login form.
     jest.spyOn(console, 'log').mockImplementation(() => {})
-    jest.spyOn(console, 'error')
-    jest.spyOn(console, 'warn')
+    // Silenced so nothing reaches the output, but still recorded: afterEach
+    // fails the test on any error or warning.
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
     mockContextValues.length = 0
     Object.values(mockRenderedProps).forEach((props) => {
       props.length = 0
